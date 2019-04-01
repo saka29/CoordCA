@@ -114,25 +114,30 @@ A neighborhood is defined like this:
    "c" is the center cell that will be checked when running a pattern.
 
 \2. Remove line breaks, erase the center, and add a 1 in front.
+
    ```1100010010001100010010001```
    
 \3. Convert to Hexadecimal.
+
    ```1891891```
    
 That is our neighborhood. Next, we specify the range of the neighborhood.
 This is the distance from the center to the edge of our square in cells.
 In this case, our range is 2. Add that to the rulestring separated by a hyphen (-).
+
 ```1891891-2```
 
 The next part is the birth.
 A dead cell with the right ammount of neighbors will be born the next generation.
 Each birth value will be separated by a hyphen.
+
 ```1891891-2_3```
 
 The next part is survival.
 This is similar to birth.
 A live cell with the wrong amount of neighbors will die the next generation.
 Again, each value will be separated by a hyphen.
+
 ```1891891-2_3_2-3```
 
 That is our ruleString!
