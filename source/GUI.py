@@ -696,7 +696,7 @@ class App():
         self.pattmenu.add_command(label='Copy Pattern (RLE)',command=copy)
         self.pattmenu.add_command(label='Copy Pattern (Coords)',command=copyCoords)
         self.pattmenu.add_separator()
-        self.pattmenu.add_command(label='Draw',command=foo)
+        self.pattmenu.add_command(label='Draw',command=drawMode)
         self.menubar.add_cascade(label='Pattern',menu=self.pattmenu)
 
         self.viewmenu = tk.Menu(self.menubar,tearoff=0)
