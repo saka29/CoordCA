@@ -2,11 +2,18 @@
 #Can actually simulate CA
 import copy
 
+class Pattern(set):
+    def toggle(self, coord):
+        # if coord in self then remove else add
+        self ^= {coord}
+
+
 class Universe:
     def __init__(self,rule='1FF-1_3_2-3',pattern=set()):
         self.pattern = pattern
         self.rule = Rule(rule)
         self.population = len(self.pattern)
+
 
 class Rule:
     def __init__(self,ruleStr):

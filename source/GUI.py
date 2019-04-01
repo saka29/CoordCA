@@ -124,7 +124,7 @@ def clear():
     global cSize
     global selC1
     global selC2
-    display.Viewer.pattern = set()
+    display.Viewer.pattern = cca.Pattern()
     auto = 0
     gens = 0
     viewx = 0
@@ -303,7 +303,7 @@ def rle2coords(rle):
     e = ''
     x = 0
     y = 0
-    r = set()
+    r = cca.Pattern()
     for c in rle:
         if c.isdigit():
             n += c
@@ -577,7 +577,7 @@ class saveMenu():
 class PatternWindow():
     def __init__(self,root):
         self.universe = cca.Universe(rule='1891891-2_3_2-3')
-        self.pattern = set()
+        self.pattern = cca.Pattern()
         self.rule = '1891891-2_3_2-3'
         self.pop = len(self.pattern)
         self.grid = tk.Canvas(root,bg='black',relief='sunken')
@@ -667,10 +667,7 @@ class PatternWindow():
         appPosY = m.floor(mouseY/cSize)
         if mode==0:
             if (appPosY,appPosX) >= (0,0):
-                if (appPosX-viewx,appPosY-viewy) in self.pattern:
-                    self.pattern.remove((appPosX-viewx,appPosY-viewy))
-                else:
-                    self.pattern.add((appPosX-viewx,appPosY-viewy))
+                self.pattern.toggle((appPosX-viewx,appPosY-viewy))
         elif mode==2:
             selC1 = (round(event.x/cSize)*cSize-(viewx*cSize),round(event.y/cSize)*cSize-(viewy*cSize))
             selC2 = ()
