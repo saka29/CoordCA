@@ -90,6 +90,7 @@ def mouseDrag(event):
         viewStartX = viewx
         viewStartY = viewy
     if event.type=='6':
+        mousePos(event)
         x,y=round(event.x/cSize), round(event.y/cSize)
         if mode==1:
             viewx = viewStartX+x-mouseNonB1X
