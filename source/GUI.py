@@ -24,6 +24,7 @@ selC2 = ()
 cSize = 10
 b1 = 0
 paste = 0
+dragStart = None
 initPatt = []
 filePath = str(pathlib.Path(__file__).parent)
 
@@ -85,6 +86,7 @@ def mouseDrag(event):
     global viewStartY
     global selC1
     global selC2
+    global dragStart
     if event.type=='4':
         mouseNonB1X,mouseNonB1Y = round(event.x/cSize),round(event.y/cSize)
         viewStartX = viewx
@@ -92,11 +94,21 @@ def mouseDrag(event):
     if event.type=='6':
         mousePos(event)
         x,y=round(event.x/cSize), round(event.y/cSize)
-        if mode==1:
+        if mode==0:
+            appPosX = m.floor(mouseX/cSize)
+            appPosY = m.floor(mouseY/cSize)
+            if dragStart is None:
+                dragStart = (appPosX-viewx,appPosY-viewy) not in display.Viewer.pattern
+            display.Viewer.pattern.toggle((appPosX-viewx,appPosY-viewy), to=dragStart)
+        elif mode==1:
             viewx = viewStartX+x-mouseNonB1X
             viewy = viewStartY+y-mouseNonB1Y
         elif mode==2:
             selC2 = (x*cSize-(viewx*cSize),y*cSize-(viewy*cSize))
+
+def dragOff(event):
+    global dragStart
+    dragStart = None
 
 #Toggle whatever
 def toggleAuto():
@@ -787,6 +799,7 @@ display.Viewer.grid.bind_all('<Control-Shift-Key-O>',openCl)
 display.Viewer.grid.bind_all('<Motion>',mousePos)
 display.Viewer.grid.bind_all('<B1-Motion>',mouseDrag)
 display.Viewer.grid.bind_all('<Button-1>',mouseDrag)
+display.Viewer.grid.bind_all('<ButtonRelease-1>', dragOff)
 while 1:
     try:
         display.Viewer.grid.delete('all')

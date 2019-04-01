@@ -3,9 +3,16 @@
 import copy
 
 class Pattern(set):
-    def toggle(self, coord):
-        # if coord in self then remove else add
-        self ^= {coord}
+    def toggle(self, coord, *, to=None):
+        if to is None:
+            # if coord in self then remove else add
+            self ^= {coord}
+        elif to:
+            # 'toggle *to* true'
+            self.add(coord)
+        else:
+            # 'toggle *to* false'
+            self.discard(coord)
 
 
 class Universe:
