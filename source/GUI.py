@@ -24,6 +24,7 @@ selC2 = ()
 cSize = 10
 b1 = 0
 paste = 0
+dragStart = None
 initPatt = []
 filePath = str(pathlib.Path(__file__).parent)
 
@@ -85,17 +86,29 @@ def mouseDrag(event):
     global viewStartY
     global selC1
     global selC2
+    global dragStart
+    appPosX = m.floor(mouseX/cSize)
+    appPosY = m.floor(mouseY/cSize)
+    if dragStart is None:
+        dragStart = (appPosX-viewx,appPosY-viewy) not in display.Viewer.pattern
     if event.type=='4':
         mouseNonB1X,mouseNonB1Y = round(event.x/cSize),round(event.y/cSize)
         viewStartX = viewx
         viewStartY = viewy
     if event.type=='6':
+        mousePos(event)
         x,y=round(event.x/cSize), round(event.y/cSize)
-        if mode==1:
+        if mode==0:
+            display.Viewer.pattern.toggleAllFromLast((appPosX-viewx,appPosY-viewy), to=dragStart)
+        elif mode==1:
             viewx = viewStartX+x-mouseNonB1X
             viewy = viewStartY+y-mouseNonB1Y
         elif mode==2:
             selC2 = (x*cSize-(viewx*cSize),y*cSize-(viewy*cSize))
+
+def dragOff(event):
+    global dragStart
+    dragStart = None
 
 #Toggle whatever
 def toggleAuto():
@@ -123,7 +136,7 @@ def clear():
     global cSize
     global selC1
     global selC2
-    display.Viewer.pattern = set()
+    display.Viewer.pattern = cca.Pattern()
     auto = 0
     gens = 0
     viewx = 0
@@ -302,7 +315,7 @@ def rle2coords(rle):
     e = ''
     x = 0
     y = 0
-    r = set()
+    r = cca.Pattern()
     for c in rle:
         if c.isdigit():
             n += c
@@ -576,7 +589,7 @@ class saveMenu():
 class PatternWindow():
     def __init__(self,root):
         self.universe = cca.Universe(rule='1891891-2_3_2-3')
-        self.pattern = set()
+        self.pattern = cca.Pattern()
         self.rule = '1891891-2_3_2-3'
         self.pop = len(self.pattern)
         self.grid = tk.Canvas(root,bg='black',relief='sunken')
@@ -661,15 +674,15 @@ class PatternWindow():
         global selC1
         global selC2
         global mode
+        global dragStart
         cSize = self.cSize
         appPosX = m.floor(mouseX/cSize)
         appPosY = m.floor(mouseY/cSize)
+        if dragStart is None:
+            dragStart = (appPosX-viewx,appPosY-viewy) not in display.Viewer.pattern
         if mode==0:
             if (appPosY,appPosX) >= (0,0):
-                if (appPosX-viewx,appPosY-viewy) in self.pattern:
-                    self.pattern.remove((appPosX-viewx,appPosY-viewy))
-                else:
-                    self.pattern.add((appPosX-viewx,appPosY-viewy))
+                self.pattern.toggle((appPosX-viewx,appPosY-viewy))
         elif mode==2:
             selC1 = (round(event.x/cSize)*cSize-(viewx*cSize),round(event.y/cSize)*cSize-(viewy*cSize))
             selC2 = ()
@@ -789,6 +802,7 @@ display.Viewer.grid.bind_all('<Control-Shift-Key-O>',openCl)
 display.Viewer.grid.bind_all('<Motion>',mousePos)
 display.Viewer.grid.bind_all('<B1-Motion>',mouseDrag)
 display.Viewer.grid.bind_all('<Button-1>',mouseDrag)
+display.Viewer.grid.bind_all('<ButtonRelease-1>', dragOff)
 while 1:
     try:
         display.Viewer.grid.delete('all')
