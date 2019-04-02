@@ -102,7 +102,7 @@ class Simulator:
         self.survival = survival
         self.cells = patt
 
-    DEF NeedCheckCells(self,cells,neighborhood): #Finds the coordinates of cells that need to be checked when calculating birth. For this reason, there will be no B0.
+    def needCheckCells(self,cells,neighborhood): #Finds the coordinates of cells that need to be checked when calculating birth. For this reason, there will be no B0.
         needCheck = set()
         ch = 'cool easter egg'
         for c in cells:
