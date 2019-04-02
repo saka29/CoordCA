@@ -87,6 +87,10 @@ def mouseDrag(event):
     global selC1
     global selC2
     global dragStart
+    appPosX = m.floor(mouseX/cSize)
+    appPosY = m.floor(mouseY/cSize)
+    if dragStart is None:
+        dragStart = (appPosX-viewx,appPosY-viewy) not in display.Viewer.pattern
     if event.type=='4':
         mouseNonB1X,mouseNonB1Y = round(event.x/cSize),round(event.y/cSize)
         viewStartX = viewx
@@ -95,10 +99,6 @@ def mouseDrag(event):
         mousePos(event)
         x,y=round(event.x/cSize), round(event.y/cSize)
         if mode==0:
-            appPosX = m.floor(mouseX/cSize)
-            appPosY = m.floor(mouseY/cSize)
-            if dragStart is None:
-                dragStart = (appPosX-viewx,appPosY-viewy) not in display.Viewer.pattern
             display.Viewer.pattern.toggleAllFromLast((appPosX-viewx,appPosY-viewy), to=dragStart)
         elif mode==1:
             viewx = viewStartX+x-mouseNonB1X
@@ -674,9 +674,12 @@ class PatternWindow():
         global selC1
         global selC2
         global mode
+        global dragStart
         cSize = self.cSize
         appPosX = m.floor(mouseX/cSize)
         appPosY = m.floor(mouseY/cSize)
+        if dragStart is None:
+            dragStart = (appPosX-viewx,appPosY-viewy) not in display.Viewer.pattern
         if mode==0:
             if (appPosY,appPosX) >= (0,0):
                 self.pattern.toggle((appPosX-viewx,appPosY-viewy))
