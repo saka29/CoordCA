@@ -1,8 +1,19 @@
 #Main CoordCA Engine
 #Can actually simulate CA
 import copy
+import math
+
+def _range(a, b):
+    if a > b:
+        yield from range(a, b, -1)
+    else:
+        yield from range(a, b)
+    yield b
 
 class Pattern(set):
+    def __init__(self):
+        self.last = None  # last-toggled coord
+    
     def toggle(self, coord, *, to=None):
         if to is None:
             # if coord in self then remove else add
@@ -13,6 +24,39 @@ class Pattern(set):
         else:
             # 'toggle *to* false'
             self.discard(coord)
+        self.last = coord
+    
+    def add(self, coord):
+        super().add(coord)
+        self.last = coord
+    
+    def discard(self, coord):
+        super().discard(coord)
+        self.last = coord
+    
+    def remove(self, coord):
+        super().remove(coord)
+        self.last = coord
+    
+    def _generate_intermediate_coords(self, coord):
+        # generate intermediates between self.last and coord
+        (x0, y0), (x1, y1) = self.last, coord
+        slope = 0 if x0 == x1 else (y0 - y1) / (x0 - x1)
+        def f(x):
+            return slope * (x - x0) + y0
+        x, last_y = x0, int(f(x0))
+        for x in _range(x0, coord[0]):
+            y = int(f(x))
+            for intermediate_y in _range(last_y, y):
+                yield (x, intermediate_y)
+            last_y = y
+        for intermediate_y in _range(last_y, coord[1]):
+            yield (x, intermediate_y)
+        yield coord
+    
+    def toggleAllFromLast(self, coord, *, to=None):
+        for coord in self._generate_intermediate_coords(coord):
+            self.toggle(coord, to=to)
 
 
 class Universe:

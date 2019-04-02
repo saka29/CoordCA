@@ -99,7 +99,7 @@ def mouseDrag(event):
             appPosY = m.floor(mouseY/cSize)
             if dragStart is None:
                 dragStart = (appPosX-viewx,appPosY-viewy) not in display.Viewer.pattern
-            display.Viewer.pattern.toggle((appPosX-viewx,appPosY-viewy), to=dragStart)
+            display.Viewer.pattern.toggleAllFromLast((appPosX-viewx,appPosY-viewy), to=dragStart)
         elif mode==1:
             viewx = viewStartX+x-mouseNonB1X
             viewy = viewStartY+y-mouseNonB1Y
