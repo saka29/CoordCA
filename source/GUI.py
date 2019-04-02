@@ -305,7 +305,7 @@ def randFill(event=None, percentage=50):
     if not rY:
         rY = [c for c in range(int(selC2[1]/cSize),int(selC1[1]/cSize))]
     a = [(x,y) for x in rX for y in rY]
-    fill = [c for c in a if bool(r.randrange(100) < percentage)]
+    fill = [c for c in a if r.randrange(100) < percentage]
     clearSelection()
     display.Viewer.pattern.update(fill)
     
