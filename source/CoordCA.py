@@ -123,7 +123,7 @@ class Simulator:
 
     def step(self): #oh boy
         live = self.cells
-        checkB = self.needCheckCells(live,[tuple(x*-1 for x in y) for y in self.neighborhood])
+        checkB = self.needCheckCells(live,[tuple(-x for x in y) for y in self.neighborhood])
         birth = self.birth
         survival = self.survival
         new = set() #The next gen

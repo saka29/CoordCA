@@ -39,19 +39,19 @@ def foo(): #Debug function
 #View functions
 def moveUp(amount=1):
     global viewy
-    viewy += 1
+    viewy += amount
 
 def moveDown(amount=1):
     global viewy
-    viewy -= 1
+    viewy -= amount
 
 def moveLeft(amount=1):
     global viewx
-    viewx += 1
+    viewx += amount
 
 def moveRight(amount=1):
     global viewx
-    viewx -= 1
+    viewx -= amount
 
 #Step
 def step(event=None,a=1):
@@ -296,17 +296,16 @@ def unSel():
     selC1 = ()
     selC2 = ()
     
-def randFill(event=None):
-    #Yay colorful
-    #Purple is my favorite color
+def randFill(event=None, percentage=50):
     rX = [c for c in range(int(selC1[0]/cSize),int(selC2[0]/cSize))]
     if not rX:
         rX = [c for c in range(int(selC2[0]/cSize),int(selC1[0]/cSize))]
+
     rY = [c for c in range(int(selC1[1]/cSize),int(selC2[1]/cSize))]
     if not rY:
         rY = [c for c in range(int(selC2[1]/cSize),int(selC1[1]/cSize))]
     a = [(x,y) for x in rX for y in rY]
-    fill = [c for c in a if bool(round(r.random()))]
+    fill = [c for c in a if r.randrange(100) < percentage]
     clearSelection()
     display.Viewer.pattern.update(fill)
     
@@ -332,7 +331,7 @@ def rle2coords(rle):
         elif c=='$':
             y += 1
             x = 0
-    return(r)
+    return r
 
 # Python function to convert a cell list to RLE
 # Author: Nathaniel Johnston (nathaniel@nathanieljohnston.com), June 2009.
