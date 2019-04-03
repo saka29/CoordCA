@@ -27,6 +27,7 @@ paste = 0
 dragStart = None
 initPatt = []
 filePath = str(pathlib.Path(__file__).parent)
+fillPercent = 50
 
 def foo(): #Debug function
     print(display.Viewer.pattern)
@@ -37,19 +38,19 @@ def foo(): #Debug function
 ########################
 
 #View functions
-def moveUp(amount=1):
+def moveUp(event=None,amount=1):
     global viewy
     viewy += amount
 
-def moveDown(amount=1):
+def moveDown(event=None,amount=1):
     global viewy
     viewy -= amount
 
-def moveLeft(amount=1):
+def moveLeft(event=None,amount=1):
     global viewx
     viewx += amount
 
-def moveRight(amount=1):
+def moveRight(event=None,amount=1):
     global viewx
     viewx -= amount
 
@@ -63,7 +64,7 @@ def step(event=None,a=1):
     gens += 1
 
 #Reset
-def resetPatt():
+def resetPatt(event=None):
     global gens
     global auto
     gens = 0
@@ -111,7 +112,7 @@ def dragOff(event):
     dragStart = None
 
 #Toggle whatever
-def toggleAuto():
+def toggleAuto(event=None):
     global auto
     auto = not auto
 
@@ -296,7 +297,7 @@ def unSel():
     selC1 = ()
     selC2 = ()
     
-def randFill(event=None, percentage=50):
+def randFill(event=None):
     rX = [c for c in range(int(selC1[0]/cSize),int(selC2[0]/cSize))]
     if not rX:
         rX = [c for c in range(int(selC2[0]/cSize),int(selC1[0]/cSize))]
@@ -305,9 +306,13 @@ def randFill(event=None, percentage=50):
     if not rY:
         rY = [c for c in range(int(selC2[1]/cSize),int(selC1[1]/cSize))]
     a = [(x,y) for x in rX for y in rY]
-    fill = [c for c in a if r.randrange(100) < percentage]
+    fill = [c for c in a if r.randrange(100) < fillPercent]
     clearSelection()
     display.Viewer.pattern.update(fill)
+
+def fillPercentm():
+    drawMode()
+    r = fillMenu()
     
 def rle2coords(rle):
     n = ''
@@ -428,6 +433,36 @@ class ruleMenu():
         self.cancel = tk.Button(self.rm,text='Cancel',command=self.cancel)
         self.cancel.pack(side='right',pady = 10,padx  =10)
 
+class fillMenu():
+    def okay(self):
+        global fillPercent
+        if not self.field.get().isdigit():
+            tk.messagebox.showerror("Error","Invalid number.")
+        elif int(self.field.get()) < 0:
+            fillPercent = 0
+        elif int(self.field.get()) > 100:
+            fillPercent = 100
+        else:
+            fillPercent = int(self.field.get())
+        self.rm.destroy()
+
+    def cancel(self):
+        self.rm.destroy()
+        
+    def __init__(self):
+        self.rm = tk.Toplevel()
+        self.rm.title("Change Random Fill %")
+        self.rm.iconbitmap("icon.ico")
+        self.rm.resizable(False,False)
+        self.text1 = tk.Label(self.rm,text="Fill %:")
+        self.text1.pack()
+        self.field = tk.Entry(self.rm,bd=3)
+        self.field.pack(padx=10,pady=10)
+        self.ok = tk.Button(self.rm,text='Okay',command=self.okay)
+        self.ok.pack(side='left',pady = 10,padx = 10)
+        self.cancel = tk.Button(self.rm,text='Cancel',command=self.cancel)
+        self.cancel.pack(side='right',pady = 10,padx  =10)
+
 class aboutMenu():        
     def __init__(self):
         self.rm = tk.Toplevel()
@@ -436,7 +471,7 @@ class aboutMenu():
         self.rm.resizable(False,False)
         self.name = tk.Label(self.rm,text='CoordCA')
         self.name.pack(pady=10)
-        self.ver = tk.Label(self.rm,text='Version: 1.0.0 or something. Mon, April 1st, 2019')
+        self.ver = tk.Label(self.rm,text='Version: 1.0.2 or something. Mon, April 3rd, 2019')
         self.ver.pack()
         self.credit = tk.Label(self.rm,text='Created by Saka in 2019')
         self.credit.pack(padx=20,pady=10)
@@ -450,6 +485,7 @@ class creditsMenu():
         self.text = tk.Text(self.rm,width=100)
         self.text.insert(tk.END,'''
 CoordCA was coded by Dary Saka Fitrady.
+
 But he got help from various sites because he's not good at Python.
 
 Also thanks to the developers of Python, Tkinter, pip, and pyinstaller.
@@ -458,6 +494,7 @@ Thanks to the support from many people, especially from the ConwayLife Lounge Di
 https://discord.gg/BCuYCEn
 
 Thanks to John Conway for creating CGoL,
+
 and Nathaniel Johnston, who created the Cellular Automata Forums and the cell-list to RLE function:
 https://conwaylife.com/forums
 
@@ -468,6 +505,8 @@ Thanks to Andrew Trevorrow for creating Golly, another, much better, CA Simulato
 http://golly.sourceforge.net/
 
 Thanks to Wildmyron / Arie Paap for suggesting the use of sets.
+
+Other Contributors: Wright, kivattt.
 
 Also random shoutout to 77topaz and Goldtiger997. Thanks for existing!
 
@@ -674,12 +713,14 @@ class PatternWindow():
         global selC2
         global mode
         global dragStart
+        global auto
         cSize = self.cSize
         appPosX = m.floor(mouseX/cSize)
         appPosY = m.floor(mouseY/cSize)
         if dragStart is None:
             dragStart = (appPosX-viewx,appPosY-viewy) not in display.Viewer.pattern
         if mode==0:
+            auto = 0
             if (appPosY,appPosX) >= (0,0):
                 self.pattern.toggle((appPosX-viewx,appPosY-viewy))
         elif mode==2:
@@ -735,6 +776,7 @@ class App():
         self.selectionmenu.add_command(label='Remove selection',command=unSel)
         self.selectionmenu.add_command(label='Clear inside selection',command=clearSelection)
         self.selectionmenu.add_command(label='Random Fill',command=randFill)
+        self.selectionmenu.add_command(label='Set Random Fill %',command=fillPercentm)
         self.menubar.add_cascade(label='Selection',menu=self.selectionmenu)
 
         self.helpmenu = tk.Menu(self.menubar,tearoff=0)
@@ -792,10 +834,14 @@ display.Viewer.grid.bind_all('<Up>',moveUp)
 display.Viewer.grid.bind_all('<Left>',moveLeft)
 display.Viewer.grid.bind_all('<Down>',moveDown)
 display.Viewer.grid.bind_all('<Right>',moveRight)
+
 root.bind('<space>',step)
 root.bind('<Control-c>',copy)
 root.bind('<Control-v>',display.Viewer.paste)
 root.bind('<Delete>',clearSelection)
+root.bind('<Return>',toggleAuto)
+root.bind('<Control-r>',resetPatt)
+
 display.Viewer.grid.bind_all('<Control-Key-5>',randFill)
 display.Viewer.grid.bind_all('<Control-Shift-Key-O>',openCl)
 display.Viewer.grid.bind_all('<Motion>',mousePos)
