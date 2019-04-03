@@ -103,30 +103,17 @@ class Simulator:
         self.cells = patt
 
     def needCheckCells(self,cells,neighborhood): #Finds the coordinates of cells that need to be checked when calculating birth. For this reason, there will be no B0.
-        needCheck = set()
-        ch = 'cool easter egg'
-        for c in cells:
-            for k in neighborhood:
-                ch = tuple(map(sum,zip(c,k)))
-                needCheck.add(ch)
-
-        return needCheck
+        return {tuple(map(sum, zip(c, k))) for c in cells for k in neighborhood}
 
     def countNeighbors(self,coord,neighborhood): #Self-explanatory
-        live = self.cells
-        neighbors = 0
-        for k in neighborhood:
-            if tuple(map(sum,zip(coord,k))) in live:
-                neighbors += 1
-
-        return neighbors
-
+        return sum(tuple(map(sum, zip(coord, k))) in self.cells for k in neighborhood)
+    
     def step(self): #oh boy
         live = self.cells
         checkB = self.needCheckCells(live,[tuple(-x for x in y) for y in self.neighborhood])
         birth = self.birth
         survival = self.survival
-        new = set() #The next gen
+        new = Pattern() #The next gen
 
         #Lets do birth first
         
