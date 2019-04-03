@@ -73,6 +73,7 @@ CoordCA has a bar on top with a bunch of dropdown menus to do what you need. Her
 **Remove Selection:** Remove the current selection.
 **Clear Inside Selection:** Clear the selection.
 **Random Fill:** Fill the selection with random cells.
+**Set Random Fill %:** Change the density of the random fill.
 
 #### Help Menu
 **About:** Tells information about the program.
@@ -151,6 +152,7 @@ A CCA has two parts, separated by a colon (:).
 The first part is the rule (Described above).
 The second part is a list of tuples which are the coordinates of the live cells.
 Example of a pattern in CCA format:
+
 ```1891891-2_3_2-3:[(0, 1), (1, 1), (2, 1), (2, 0), (4, 0), (4, 1), (4, 2), (3, 2), (5, 2), (2, 3), (2, 4)]```
 
 ## Known Bugs
