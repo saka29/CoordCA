@@ -178,11 +178,24 @@ def zoomOut():
     global selC1
     global selC2
     global auto
-    if cSize >= 1:
+    if cSize > 1:
         cSize -= 1
     selC1 = ()
     selC2 = ()
     auto = 0
+
+def center(event=None):
+    global viewy
+    viewy = 0
+    global viewx
+    viewx = 0
+
+def mouseZoom(event):
+    delt = event.delta
+    if delt > 0:
+        zoomIn()
+    if delt < 0:
+        zoomOut()
 
 def refreshMouse():
     global mouseX
@@ -471,7 +484,7 @@ class aboutMenu():
         self.rm.resizable(False,False)
         self.name = tk.Label(self.rm,text='CoordCA')
         self.name.pack(pady=10)
-        self.ver = tk.Label(self.rm,text='Version: 1.0.2 or something. Mon, April 3rd, 2019')
+        self.ver = tk.Label(self.rm,text='Version: 1.0.2 or something. Sat, April 6rd, 2019')
         self.ver.pack()
         self.credit = tk.Label(self.rm,text='Created by Saka in 2019')
         self.credit.pack(padx=20,pady=10)
@@ -505,8 +518,7 @@ Thanks to Andrew Trevorrow for creating Golly, another, much better, CA Simulato
 http://golly.sourceforge.net/
 
 Thanks to Wildmyron / Arie Paap for suggesting the use of sets.
-
-Other Contributors: Wright, kivattt.
+Other Contributors: Wright, kivattt, AforAmpere.
 
 Also random shoutout to 77topaz and Goldtiger997. Thanks for existing!
 
@@ -841,6 +853,8 @@ root.bind('<Control-v>',display.Viewer.paste)
 root.bind('<Delete>',clearSelection)
 root.bind('<Return>',toggleAuto)
 root.bind('<Control-r>',resetPatt)
+root.bind('<m>',center)
+root.bind('<MouseWheel>',mouseZoom)
 
 display.Viewer.grid.bind_all('<Control-Key-5>',randFill)
 display.Viewer.grid.bind_all('<Control-Shift-Key-O>',openCl)
