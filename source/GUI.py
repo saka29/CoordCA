@@ -129,7 +129,7 @@ def autoNo():
     auto = 0
 
 #Clear
-def clear():
+def clear(event = None):
     global auto
     global gens
     global viewx
@@ -440,6 +440,7 @@ class ruleMenu():
         self.text1 = tk.Label(self.rm,text="Set rule:")
         self.text1.pack()
         self.field = tk.Entry(self.rm,bd=3)
+        self.field.insert(0,str(display.Viewer.rule))
         self.field.pack(padx=10,pady=10)
         self.ok = tk.Button(self.rm,text='Okay',command=self.okay)
         self.ok.pack(side='left',pady = 10,padx = 10)
@@ -853,6 +854,7 @@ root.bind('<Control-v>',display.Viewer.paste)
 root.bind('<Delete>',clearSelection)
 root.bind('<Return>',toggleAuto)
 root.bind('<Control-r>',resetPatt)
+root.bind('<Control-n>',clear)
 root.bind('<m>',center)
 root.bind('<MouseWheel>',mouseZoom)
 
