@@ -118,7 +118,7 @@ class Simulator:
         #Lets do birth first
         
         for c in checkB:
-            if self.countNeighbors(c,self.neighborhood) in birth:
+            if self.countNeighbors(c,self.neighborhood) in birth and c not in live:
                 new.add(c)
 
         #Survival
