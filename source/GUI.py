@@ -435,7 +435,7 @@ class ruleMenu():
     def __init__(self):
         self.rm = tk.Toplevel()
         self.rm.title("Set rule")
-        self.rm.iconbitmap("icon.ico")
+        self.rm.iconbitmap("icon.icon")
         self.rm.resizable(False,False)
         self.text1 = tk.Label(self.rm,text="Set rule:")
         self.text1.pack()
@@ -466,7 +466,7 @@ class fillMenu():
     def __init__(self):
         self.rm = tk.Toplevel()
         self.rm.title("Change Random Fill %")
-        self.rm.iconbitmap("icon.ico")
+        self.rm.iconbitmap("icon.icon")
         self.rm.resizable(False,False)
         self.text1 = tk.Label(self.rm,text="Fill %:")
         self.text1.pack()
@@ -481,7 +481,7 @@ class aboutMenu():
     def __init__(self):
         self.rm = tk.Toplevel()
         self.rm.title("About")
-        self.rm.iconbitmap("icon.ico")
+        self.rm.iconbitmap("icon.icon")
         self.rm.resizable(False,False)
         self.name = tk.Label(self.rm,text='CoordCA')
         self.name.pack(pady=10)
@@ -494,12 +494,11 @@ class creditsMenu():
     def __init__(self):
         self.rm = tk.Toplevel()
         self.rm.title("Credits")
-        self.rm.iconbitmap("icon.ico")
+        self.rm.iconbitmap("icon.icon")
         self.rm.resizable(False,False)
         self.text = tk.Text(self.rm,width=100)
         self.text.insert(tk.END,'''
 CoordCA was coded by Dary Saka Fitrady.
-
 But he got help from various sites because he's not good at Python.
 
 Also thanks to the developers of Python, Tkinter, pip, and pyinstaller.
@@ -519,6 +518,7 @@ Thanks to Andrew Trevorrow for creating Golly, another, much better, CA Simulato
 http://golly.sourceforge.net/
 
 Thanks to Wildmyron / Arie Paap for suggesting the use of sets.
+
 Other Contributors: Wright, kivattt, AforAmpere.
 
 Also random shoutout to 77topaz and Goldtiger997. Thanks for existing!
@@ -541,7 +541,7 @@ class gotoMenu():
     def __init__(self):
         self.rm = tk.Toplevel()
         self.rm.title("Goto...")
-        self.rm.iconbitmap("icon.ico")
+        self.rm.iconbitmap("icon.icon")
         self.rm.resizable(False,False)
         self.text1 = tk.Label(self.rm,text="Coords: (Top left)")
         self.text1.pack()
@@ -566,7 +566,7 @@ class colorMenu():
     def __init__(self):
         self.rm = tk.Toplevel()
         self.rm.title("Colours")
-        self.rm.iconbitmap("icon.ico")
+        self.rm.iconbitmap("icon.icon")
         self.rm.resizable(False,False)
         self.text2 = tk.Label(self.rm,text="Dead:")
         self.text2.pack()
@@ -839,7 +839,7 @@ display = App(root)
 wwidth = display.Viewer.grid.winfo_width()
 wheight = display.Viewer.grid.winfo_height()
 display.Viewer.grid.config(cursor='pencil')
-root.iconbitmap('icon.ico')
+root.iconbitmap('icon.icon')
 root.title("CoordCA")
 root.config(menu=display.menubar)
 root.minsize(640,485)
